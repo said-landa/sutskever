@@ -1,12 +1,12 @@
-# Camera Gateway
+# Video Gateway
 
 ## Purpose
 
-The Camera Gateway is responsible for connecting Vision to video sources.
+The Video Gateway is responsible for connecting Vision to video sources.
 
 It abstracts every camera manufacturer, protocol and transport mechanism into a single, consistent interface for the rest of the platform.
 
-The Camera Gateway never performs computer vision.
+The Video Gateway never performs computer vision.
 
 It never detects objects.
 
@@ -18,7 +18,7 @@ Its only responsibility is to produce a continuous stream of frames.
 
 # Responsibilities
 
-The Camera Gateway is responsible for:
+The Video Gateway is responsible for:
 
 - Discovering cameras.
 - Connecting to cameras.
@@ -96,7 +96,7 @@ The Vision Engine should not care how the stream is produced.
 
 # Frame
 
-A frame is the output of the Camera Gateway.
+A frame is the output of the Video Gateway.
 
 A frame contains:
 
@@ -221,7 +221,7 @@ No other module should know:
 - OpenCV
 - Camera manufacturer
 
-Those implementation details belong exclusively to the Camera Gateway.
+Those implementation details belong exclusively to the Video Gateway.
 
 ---
 
