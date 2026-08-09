@@ -2,120 +2,120 @@
 
 ## Vision
 
-Vision transforma video en información accionable para negocios.
+Vision transforms video into actionable information for businesses.
 
-El sistema recibe video de una o más cámaras, detecta eventos relevantes, aplica reglas de negocio y notifica a los usuarios cuando ocurre algo importante.
+The system receives video from one or more cameras, detects relevant events, applies business rules and notifies users when something important happens.
 
-El objetivo no es almacenar video.
+The goal is not to store video.
 
-El objetivo es transformar horas de video en decisiones claras.
+The goal is to transform hours of video into clear decisions.
 
 ---
 
-# Principios
+# Principles
 
-## 1. Arquitectura modular
+## 1. Modular Architecture
 
-Cada componente tiene una única responsabilidad.
+Each component has a single responsibility.
 
-Los módulos pueden evolucionar independientemente.
+Modules can evolve independently.
 
-Por ejemplo, el motor de visión puede cambiar completamente sin modificar el motor de reglas.
+For example, the Vision Engine can change completely without modifying the Rule Engine.
 
 ---
 
 ## 2. Event-Driven
 
-Todo el sistema gira alrededor de eventos.
+The entire system revolves around events.
 
-Nunca alrededor de imágenes.
+Never around images.
 
-Nunca alrededor de modelos.
+Never around models.
 
-Los modelos producen eventos.
+Models produce events.
 
-Los eventos producen decisiones.
+Events produce decisions.
 
-Ejemplo:
+Example:
 
 Frame
 
 ↓
 
-Persona detectada
+Person detected
 
 ↓
 
-Persona entra a zona
+Person enters zone
 
 ↓
 
-Fila supera 6 personas
+Queue exceeds 6 people
 
 ↓
 
-Enviar notificación
+Send notification
 
 ---
 
-## 3. IA desacoplada
+## 3. Decoupled AI
 
-Los modelos de IA son intercambiables.
+AI models are interchangeable.
 
-YOLO puede ser reemplazado por cualquier otro detector sin modificar el resto del sistema.
+YOLO can be replaced by any other detector without modifying the rest of the system.
 
 ---
 
 ## 4. Local First
 
-Siempre que sea posible, el análisis ocurre dentro del negocio.
+Whenever possible, analysis takes place on the business premises.
 
-Esto reduce:
+This reduces:
 
-- latencia
-- costos
-- uso de Internet
-- problemas de privacidad
+- latency
+- costs
+- Internet usage
+- privacy concerns
 
-La nube recibe únicamente eventos y metadatos.
+The cloud receives only events and metadata.
 
 ---
 
 ## 5. Cloud Assisted
 
-La nube es responsable de:
+The cloud is responsible for:
 
-- sincronización
-- usuarios
-- organizaciones
-- notificaciones
-- configuración
+- synchronization
+- users
+- organizations
+- notifications
+- configuration
 - dashboards
-- reportes
+- reports
 
-Nunca procesa video continuamente.
+It never processes video continuously.
 
 ---
 
-# Componentes
+# Components
 
 ## Camera Gateway
 
-Responsabilidad
+Responsibility
 
-Conectarse a cámaras.
+Connect to cameras.
 
-Nunca interpreta imágenes.
+It never interprets images.
 
-Solo entrega video.
+It only delivers video.
 
-Entrada
+Input
 
 RTSP
 ONVIF
-Archivos de video
+Video files
 
-Salida
+Output
 
 Frames.
 
@@ -123,81 +123,81 @@ Frames.
 
 ## Vision Engine
 
-Responsabilidad
+Responsibility
 
-Transformar imágenes en observaciones.
+Transform images into observations.
 
-Ejemplos
+Examples
 
-Persona
+Person
 
-Mesa
+Table
 
-Caja
+Checkout Counter
 
-Vehículo
+Vehicle
 
-Fuego
+Fire
 
-Humo
+Smoke
 
-No toma decisiones.
+It does not make decisions.
 
-Solo observa.
+It only observes.
 
 ---
 
 ## Tracking Engine
 
-Responsabilidad
+Responsibility
 
-Mantener identidad temporal.
+Maintain temporal identity.
 
-Ejemplo
+Example
 
-Persona 17 entra.
+Person 17 enters.
 
-Camina.
+Walks.
 
-Sale.
+Leaves.
 
 ---
 
 ## Zone Engine
 
-Responsabilidad
+Responsibility
 
-Interpretar la geometría del negocio.
+Interpret the geometry of the business.
 
-Ejemplos
+Examples
 
-Entrada
+Entrance
 
-Caja
+Checkout
 
-Comedor
+Dining Area
 
-Cocina
+Kitchen
 
-Bodega
+Storage Area
 
 ---
 
 ## Event Engine
 
-Responsabilidad
+Responsibility
 
-Convertir observaciones en eventos.
+Convert observations into events.
 
-Ejemplo
+Example
 
-Observación
+Observation
 
-Persona permanece 5 minutos.
+Person remains for 5 minutes.
 
 ↓
 
-Evento
+Event
 
 LongStayDetected
 
@@ -205,29 +205,29 @@ LongStayDetected
 
 ## Rule Engine
 
-Responsabilidad
+Responsibility
 
-Evaluar reglas configuradas por el cliente.
+Evaluate rules configured by the customer.
 
-Ejemplo
+Example
 
-SI
+IF
 
-Más de seis personas
+More than six people
 
-Durante tres minutos
+For three minutes
 
 ↓
 
-Generar alerta.
+Generate alert.
 
 ---
 
 ## Notification Engine
 
-Responsabilidad
+Responsibility
 
-Entregar eventos importantes.
+Deliver important events.
 
 Push
 
@@ -241,47 +241,47 @@ Webhook
 
 ## Cloud Backend
 
-Responsabilidad
+Responsibility
 
-Administrar:
+Manage:
 
-Usuarios
+Users
 
-Sucursales
+Sites
 
-Cámaras
+Cameras
 
-Configuraciones
+Configurations
 
-Eventos
+Events
 
-Reportes
+Reports
 
-No ejecuta visión computacional.
+It does not run computer vision.
 
 ---
 
 ## Mobile App
 
-Responsabilidad
+Responsibility
 
-Mostrar:
+Display:
 
-Alertas
+Alerts
 
-Historial
+History
 
-Estado del sistema
+System Status
 
-Configuración
+Configuration
 
 Dashboard
 
-Nunca analiza video.
+It never analyzes video.
 
 ---
 
-# Flujo General
+# General Flow
 
 Camera
 
@@ -319,12 +319,12 @@ Mobile
 
 ---
 
-# Filosofía
+# Philosophy
 
-Vision no intenta responder:
+Vision does not try to answer:
 
-"¿Qué hay en esta imagen?"
+"What is in this image?"
 
-Vision intenta responder:
+Vision tries to answer:
 
-"¿Qué necesita saber el dueño del negocio en este momento?"
+"What does the business owner need to know right now?"

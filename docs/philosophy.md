@@ -1,23 +1,23 @@
-El objetivo del proyecto NO es escribir código rápido.
+The goal of this project is NOT to write code quickly.
 
-El objetivo es construir una plataforma que pueda mantenerse durante muchos años.
+The goal is to build a platform that can be maintained for many years.
 
-Siempre se priorizarán:
+The following will always be prioritized:
 
-Legibilidad.
+Readability.
 
-Escalabilidad.
+Scalability.
 
-Modularidad.
+Modularity.
 
-Bajo acoplamiento.
+Loose coupling.
 
-Alta cohesión.
+High cohesion.
 
-Todo componente debe tener una única responsabilidad.
+Every component must have a single responsibility.
 
-Toda decisión debe documentarse.
+Every decision must be documented.
 
-Si existe una solución más simple con el mismo resultado, esa solución debe preferirse.
+If a simpler solution produces the same result, that solution must be preferred.
 
-El código será leído muchas más veces de las que será escrito.
+Code will be read far more often than it is written.

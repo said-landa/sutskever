@@ -1,54 +1,54 @@
 # Concepts
 
-Este documento define el vocabulario oficial de Vision.
+This document defines the official vocabulary of Vision.
 
-Todos los documentos y el código deben utilizar exactamente estos conceptos.
+All documents and code must use these exact concepts.
 
 ---
 
 # Organization
 
-Una organización representa una empresa.
+An organization represents a company.
 
-Ejemplos
+Examples
 
-- Restaurante
-- Tienda
-- Farmacia
+- Restaurant
+- Store
+- Pharmacy
 - Hotel
 
-Una organización puede tener múltiples sucursales.
+An organization may have multiple sites.
 
 ---
 
 # Site
 
-Un sitio representa una ubicación física.
+A site represents a physical location.
 
-Ejemplos
+Examples
 
-- Restaurante Centro
-- Restaurante Norte
+- Downtown Restaurant
+- North Restaurant
 
-Cada sitio contiene cámaras, zonas y usuarios.
+Each site contains cameras, zones and users.
 
 ---
 
 # Camera
 
-Una cámara representa una fuente de video.
+A camera represents a video source.
 
-Una cámara nunca interpreta imágenes.
+A camera never interprets images.
 
-Únicamente produce video.
+It only produces video.
 
-Entradas
+Inputs
 
 - RTSP
 - ONVIF
-- Archivo de video
+- Video file
 
-Salida
+Output
 
 - Frames
 
@@ -56,30 +56,30 @@ Salida
 
 # Frame
 
-Un frame representa una única imagen capturada por una cámara.
+A frame represents a single image captured by a camera.
 
-Los frames son efímeros.
+Frames are ephemeral.
 
-Nunca representan conocimiento.
+They never represent knowledge.
 
 ---
 
 # Observation
 
-Una observación representa algo visto por el sistema.
+An observation represents something seen by the system.
 
-Ejemplos
+Examples
 
-- Persona detectada.
-- Mesa detectada.
-- Vehículo detectado.
-- Humo detectado.
+- Person detected.
+- Table detected.
+- Vehicle detected.
+- Smoke detected.
 
-Las observaciones únicamente describen el mundo.
+Observations only describe the world.
 
-Nunca toman decisiones.
+They never make decisions.
 
-Ejemplo
+Example
 
 ```
 Observation
@@ -95,321 +95,323 @@ position = (x, y)
 
 # Track
 
-Un track representa una entidad observada durante un periodo de tiempo.
+A track represents an entity observed over a period of time.
 
-Ejemplo
+Example
 
-Persona 17
+Person 17
 
-entra
+enters
 
-camina
+walks
 
-sale
+leaves
 
-Un track mantiene identidad temporal.
+A track maintains temporal identity.
 
 ---
 
 # Zone
 
-Una zona representa una región definida por el negocio.
+A zone represents a region defined by the business.
 
-Ejemplos
+Examples
 
-- Entrada
-- Caja
-- Cocina
-- Comedor
-- Bodega
+- Entrance
+- Checkout
+- Kitchen
+- Dining Area
+- Storage Area
 
-Las zonas son independientes de la IA.
+Zones are independent of AI.
 
 ---
 
 # Detector
 
-Un detector transforma frames en observaciones.
+A detector transforms frames into observations.
 
-Ejemplos
+Examples
 
 Person Detector
 
 ↓
 
-Persona
+Person
 
 Fire Detector
 
 ↓
 
-Fuego
+Fire
 
 Smoke Detector
 
 ↓
 
-Humo
+Smoke
 
-Todos los detectores producen observaciones.
+All detectors produce observations.
 
-Nunca generan alertas.
+They never generate alerts.
 
 ---
 
 # Event
 
-Un evento representa un hecho importante ocurrido en el negocio.
+An event represents an important fact that occurred in the business.
 
-Ejemplos
+Examples
 
-- Persona entra a cocina.
-- Persona sale del edificio.
-- Cola supera cinco personas.
-- Mesa permanece ocupada durante veinte minutos.
+- Person enters the kitchen.
+- Person leaves the building.
+- Queue exceeds five people.
+- Table remains occupied for twenty minutes.
 
-Los eventos se construyen a partir de observaciones.
+Events are built from observations.
 
 ---
 
 # Rule
 
-Una regla representa una condición definida por el cliente.
+A rule represents a condition defined by the customer.
 
-Ejemplo
+Example
 
-SI
+IF
 
-Más de seis personas
+More than six people
 
-en
+in
 
-Fila
+Queue
 
-durante
+for
 
-Tres minutos
+Three minutes
 
-ENTONCES
+THEN
 
-Enviar notificación.
+Send notification.
 
-Las reglas transforman eventos en acciones.
+Rules transform events into actions.
 
 ---
 
 # Action
 
-Una acción representa una respuesta del sistema.
+An action represents a system response.
 
-Ejemplos
+Examples
 
-- Enviar notificación.
-- Enviar correo.
-- Ejecutar webhook.
-- Registrar incidente.
-- Crear reporte.
+- Send notification.
+- Send email.
+- Execute webhook.
+- Record incident.
+- Create report.
 
 ---
 
 # Alert
 
-Una alerta representa una acción visible para un usuario.
+An alert represents an action visible to a user.
 
-Ejemplos
+Examples
 
-"Hay nueve personas esperando."
+"Nine people are waiting."
 
-"La cocina lleva diez minutos saturada."
+"The kitchen has been overloaded for ten minutes."
 
 ---
 
 # Incident
 
-Un incidente representa una colección de eventos relacionados.
+An incident represents a collection of related events.
 
-Ejemplo
+Example
 
-Evento
+Event
 
-Fila larga
-
-↓
-
-Caja sin operador
+Long queue
 
 ↓
 
-Clientes abandonan fila
+Checkout without an operator
 
 ↓
 
-Incidente
+Customers abandon the queue
 
-Problema de atención.
+↓
+
+Incident
+
+Customer service problem.
 
 ---
 
 # Detector Package
 
-Un paquete de detectores representa un conjunto de detectores orientados a un problema.
+A detector package represents a set of detectors focused on a specific problem.
 
-Ejemplo
+Example
 
 Restaurant Package
 
-Incluye
+Includes
 
-- Personas
-- Filas
-- Mesas
-- Cocina
+- People
+- Queues
+- Tables
+- Kitchen
 
 ---
 
 # Business Template
 
-Una plantilla representa una configuración predeterminada para un tipo de negocio.
+A business template represents a default configuration for a type of business.
 
-Ejemplos
+Examples
 
-Restaurante
+Restaurant
 
-Farmacia
+Pharmacy
 
-Supermercado
+Supermarket
 
 Hotel
 
-Cada plantilla incluye
+Each template includes
 
-- zonas
-- detectores
-- reglas
+- zones
+- detectors
+- rules
 - dashboard
 
 ---
 
 # Timeline
 
-La línea de tiempo representa la secuencia cronológica de eventos.
+The timeline represents the chronological sequence of events.
 
-Nunca almacena video.
+It never stores video.
 
-Únicamente hechos.
+It stores facts only.
 
-Ejemplo
+Example
 
 12:01
 
-Cliente entra.
+Customer enters.
 
 12:03
 
-Cliente hace fila.
+Customer joins the queue.
 
 12:08
 
-Fila supera seis personas.
+Queue exceeds six people.
 
 12:09
 
-Se envía alerta.
+Alert is sent.
 
 ---
 
 # Dashboard
 
-El dashboard representa el estado actual del negocio.
+The dashboard represents the current state of the business.
 
-Se construye únicamente utilizando eventos.
+It is built exclusively from events.
 
-Nunca analiza video directamente.
+It never analyzes video directly.
 
 ---
 
 # Vision Engine
 
-El motor de visión transforma imágenes en observaciones.
+The Vision Engine transforms images into observations.
 
-No conoce reglas.
+It does not know about rules.
 
-No conoce negocios.
+It does not know about businesses.
 
-No conoce usuarios.
+It does not know about users.
 
-Solo observa.
+It only observes.
 
 ---
 
 # Capability
-Una capacidad es algo que el sistema sabe hacer, independientemente del tipo de negocio.
 
-Ejemplos:
+A capability is something the system knows how to do, independently of the type of business.
 
-Detectar personas.
-Contar personas.
-Seguir personas.
-Detectar fuego.
-Medir permanencia.
-Detectar cruce de línea.
+Examples:
 
-Las capacidades son reutilizables. Una misma capacidad puede servir para un restaurante, un banco o una fábrica.
+Detect people.
+Count people.
+Track people.
+Detect fire.
+Measure dwell time.
+Detect line crossing.
+
+Capabilities are reusable. The same capability may serve a restaurant, a bank or a factory.
 
 ---
 
 # Solution
-Una solución es un producto construido para un sector específico.
 
-Por ejemplo:
+A solution is a product built for a specific industry.
+
+For example:
 
 Restaurant Operations
 
-Utiliza las capacidades:
+Uses the following capabilities:
 
-Detectar personas.
-Contar personas.
-Medir permanencia.
-Detectar zonas.
-Motor de reglas.
+Detect people.
+Count people.
+Measure dwell time.
+Detect zones.
+Rule Engine.
 
-Mientras que:
+Whereas:
 
 Factory Safety
 
-Utiliza:
+Uses:
 
-Detectar personas.
-Detectar cascos.
-Detectar chalecos.
-Detectar zonas peligrosas.
+Detect people.
+Detect helmets.
+Detect safety vests.
+Detect dangerous zones.
 
 ---
 
 # Rule Engine
 
-El motor de reglas transforma eventos en acciones.
+The Rule Engine transforms events into actions.
 
-No analiza imágenes.
+It does not analyze images.
 
 ---
 
 # Notification Engine
 
-El motor de notificaciones entrega acciones a los usuarios.
+The Notification Engine delivers actions to users.
 
-No interpreta eventos.
+It does not interpret events.
 
 ---
 
 # Core Philosophy
 
-Vision nunca intenta responder:
+Vision never tries to answer:
 
-"¿Qué hay en esta imagen?"
+"What is in this image?"
 
-Vision intenta responder:
+Vision tries to answer:
 
-"¿Qué necesita saber el negocio en este momento?"
+"What does the business need to know right now?"
 
-Toda la arquitectura debe respetar esta filosofía.
+The entire architecture must follow this philosophy.
