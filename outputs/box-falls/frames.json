@@ -1,0 +1,118 @@
+{
+  "duration" : 13.931666666666667,
+  "frames" : [
+    {
+      "file" : "frame-0000.jpg",
+      "time" : 0
+    },
+    {
+      "file" : "frame-0001.jpg",
+      "time" : 0.5
+    },
+    {
+      "file" : "frame-0002.jpg",
+      "time" : 1
+    },
+    {
+      "file" : "frame-0003.jpg",
+      "time" : 1.5
+    },
+    {
+      "file" : "frame-0004.jpg",
+      "time" : 2
+    },
+    {
+      "file" : "frame-0005.jpg",
+      "time" : 2.5
+    },
+    {
+      "file" : "frame-0006.jpg",
+      "time" : 3
+    },
+    {
+      "file" : "frame-0007.jpg",
+      "time" : 3.5
+    },
+    {
+      "file" : "frame-0008.jpg",
+      "time" : 4
+    },
+    {
+      "file" : "frame-0009.jpg",
+      "time" : 4.5
+    },
+    {
+      "file" : "frame-0010.jpg",
+      "time" : 5
+    },
+    {
+      "file" : "frame-0011.jpg",
+      "time" : 5.5
+    },
+    {
+      "file" : "frame-0012.jpg",
+      "time" : 6
+    },
+    {
+      "file" : "frame-0013.jpg",
+      "time" : 6.5
+    },
+    {
+      "file" : "frame-0014.jpg",
+      "time" : 7
+    },
+    {
+      "file" : "frame-0015.jpg",
+      "time" : 7.5
+    },
+    {
+      "file" : "frame-0016.jpg",
+      "time" : 8
+    },
+    {
+      "file" : "frame-0017.jpg",
+      "time" : 8.5
+    },
+    {
+      "file" : "frame-0018.jpg",
+      "time" : 9
+    },
+    {
+      "file" : "frame-0019.jpg",
+      "time" : 9.5
+    },
+    {
+      "file" : "frame-0020.jpg",
+      "time" : 10
+    },
+    {
+      "file" : "frame-0021.jpg",
+      "time" : 10.5
+    },
+    {
+      "file" : "frame-0022.jpg",
+      "time" : 11
+    },
+    {
+      "file" : "frame-0023.jpg",
+      "time" : 11.5
+    },
+    {
+      "file" : "frame-0024.jpg",
+      "time" : 12
+    },
+    {
+      "file" : "frame-0025.jpg",
+      "time" : 12.5
+    },
+    {
+      "file" : "frame-0026.jpg",
+      "time" : 13
+    },
+    {
+      "file" : "frame-0027.jpg",
+      "time" : 13.5
+    }
+  ],
+  "sampling_fps" : 2
+}

@@ -1,0 +1,57 @@
+{
+  "args": "{}",
+  "createdAt": "2026-09-22T02:01:30.92Z",
+  "dataCenterIds": [],
+  "disk": 40,
+  "env": {
+    "DTYPE": "bfloat16",
+    "ENFORCE_EAGER": "true",
+    "GPU_MEMORY_UTILIZATION": "0.90",
+    "LIMIT_MM_PER_PROMPT": "{\"image\":16,\"video\":0}",
+    "MAX_MODEL_LEN": "8192",
+    "MAX_NUM_SEQS": "1",
+    "MM_PROCESSOR_KWARGS": "{\"size\":{\"longest_edge\":262144}}",
+    "MODEL_NAME": "Qwen/Qwen3-VL-8B-Instruct"
+  },
+  "flashboot": "OFF",
+  "gpu": {
+    "allowedCudaVersions": [],
+    "count": 1,
+    "excludedTypes": [
+      "NVIDIA RTX PRO 6000 Blackwell Server Edition MIG 1g.24gb"
+    ],
+    "minCudaVersion": "13.0",
+    "pools": [
+      "AMPERE_24"
+    ]
+  },
+  "id": "1mh8qf7401tnlr",
+  "image": "registry.runpod.net/runpod-workers-worker-vllm-main-dockerfile:0730f8db5",
+  "name": "vision-qwen3vl-8b",
+  "networkVolumes": [],
+  "ports": [
+    "8888/http",
+    "22/tcp"
+  ],
+  "requestUrls": {
+    "cancel": "https://api.runpod.ai/v2/1mh8qf7401tnlr/cancel/{job_id}",
+    "health": "https://api.runpod.ai/v2/1mh8qf7401tnlr/health",
+    "purgeQueue": "https://api.runpod.ai/v2/1mh8qf7401tnlr/purge-queue",
+    "retry": "https://api.runpod.ai/v2/1mh8qf7401tnlr/retry/{job_id}",
+    "run": "https://api.runpod.ai/v2/1mh8qf7401tnlr/run",
+    "runSync": "https://api.runpod.ai/v2/1mh8qf7401tnlr/runsync",
+    "status": "https://api.runpod.ai/v2/1mh8qf7401tnlr/status/{job_id}",
+    "stream": "https://api.runpod.ai/v2/1mh8qf7401tnlr/stream/{job_id}"
+  },
+  "scaling": {
+    "queueDelay": 4,
+    "type": "QUEUE_DELAY"
+  },
+  "timeout": 600000,
+  "type": "QUEUE",
+  "workers": {
+    "idleTimeout": 5,
+    "max": 1,
+    "min": 0
+  }
+}
