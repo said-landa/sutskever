@@ -1,0 +1,6 @@
+{
+  "keyFile": "/absolute/path/to/AuthKey_YOURKEYID.p8",
+  "keyID": "YOURKEYID",
+  "teamID": "YOURTEAMID",
+  "registrationFile": "/private/tmp/vision-lab-registration.json"
+}

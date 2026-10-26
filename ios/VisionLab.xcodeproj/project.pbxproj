@@ -1,0 +1,246 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B00000000000000000000040 /* VisionLab/VisionLabApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000007 /* VisionLab/VisionLabApp.swift */; };
+		B00000000000000000000043 /* VideoAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000B /* VideoAnalysis.swift */; };
+		B00000000000000000000044 /* VideoModelClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000C /* VideoModelClient.swift */; };
+		B00000000000000000000045 /* BackgroundVideoTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000D /* BackgroundVideoTransfer.swift */; };
+		B00000000000000000000046 /* VideoTransferState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000E /* VideoTransferState.swift */; };
+		B00000000000000000000047 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000F /* PrivacyInfo.xcprivacy */; };
+		B00000000000000000000042 /* VisionLab/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000A /* VisionLab/Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		40F65E953076A924003DBDB1 /* VisionLab.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = VisionLab.entitlements; path = VisionLab/VisionLab.entitlements; sourceTree = "<group>"; };
+		B00000000000000000000005 /* VisionLab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisionLab.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B00000000000000000000007 /* VisionLab/VisionLabApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionLab/VisionLabApp.swift; sourceTree = "<group>"; };
+		B00000000000000000000008 /* VisionLab/Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = VisionLab/Info.plist; sourceTree = "<group>"; };
+		B0000000000000000000000A /* VisionLab/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = VisionLab/Assets.xcassets; sourceTree = "<group>"; };
+		B0000000000000000000000B /* VideoAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionLab/VideoAnalysis.swift; sourceTree = "<group>"; };
+		B0000000000000000000000C /* VideoModelClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionLab/VideoModelClient.swift; sourceTree = "<group>"; };
+		B0000000000000000000000D /* BackgroundVideoTransfer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionLab/BackgroundVideoTransfer.swift; sourceTree = "<group>"; };
+		B0000000000000000000000E /* VideoTransferState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionLab/VideoTransferState.swift; sourceTree = "<group>"; };
+		B0000000000000000000000F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = VisionLab/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B00000000000000000000021 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B00000000000000000000003 = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000006 /* VisionLab */,
+				B00000000000000000000004 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B00000000000000000000004 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000005 /* VisionLab.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B00000000000000000000006 /* VisionLab */ = {
+			isa = PBXGroup;
+			children = (
+				40F65E953076A924003DBDB1 /* VisionLab.entitlements */,
+				B00000000000000000000007 /* VisionLab/VisionLabApp.swift */,
+				B0000000000000000000000B /* VideoAnalysis.swift */,
+				B0000000000000000000000C /* VideoModelClient.swift */,
+				B0000000000000000000000D /* BackgroundVideoTransfer.swift */,
+				B0000000000000000000000E /* VideoTransferState.swift */,
+				B0000000000000000000000F /* PrivacyInfo.xcprivacy */,
+				B00000000000000000000008 /* VisionLab/Info.plist */,
+				B0000000000000000000000A /* VisionLab/Assets.xcassets */,
+			);
+			name = VisionLab;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B00000000000000000000002 /* VisionLab */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B00000000000000000000011 /* Build configuration list for PBXNativeTarget "VisionLab" */;
+			buildPhases = (
+				B00000000000000000000020 /* Sources */,
+				B00000000000000000000021 /* Frameworks */,
+				B00000000000000000000022 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VisionLab;
+			productName = VisionLab;
+			productReference = B00000000000000000000005 /* VisionLab.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B00000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 2630;
+				LastUpgradeCheck = 2630;
+				TargetAttributes = {
+					B00000000000000000000002 = {
+						CreatedOnToolsVersion = 26.3;
+					};
+				};
+			};
+			buildConfigurationList = B00000000000000000000010 /* Build configuration list for PBXProject "VisionLab" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = es;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				es,
+				en,
+				Base,
+			);
+			mainGroup = B00000000000000000000003;
+			productRefGroup = B00000000000000000000004 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B00000000000000000000002 /* VisionLab */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B00000000000000000000022 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B00000000000000000000042 /* VisionLab/Assets.xcassets in Resources */,
+				B00000000000000000000047 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B00000000000000000000020 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B00000000000000000000040 /* VisionLab/VisionLabApp.swift in Sources */,
+				B00000000000000000000043 /* VideoAnalysis.swift in Sources */,
+				B00000000000000000000044 /* VideoModelClient.swift in Sources */,
+				B00000000000000000000045 /* BackgroundVideoTransfer.swift in Sources */,
+				B00000000000000000000046 /* VideoTransferState.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		B00000000000000000000030 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		B00000000000000000000031 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		B00000000000000000000032 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APP_DISPLAY_NAME = "Vision Lab";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = VisionLab/VisionLab.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = VAJK75LR5L;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = VisionLab/Info.plist;
+				MARKETING_VERSION = 0.2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vision.lab;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B00000000000000000000033 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APP_DISPLAY_NAME = "Vision Lab";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = VisionLab/VisionLab.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = VAJK75LR5L;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = VisionLab/Info.plist;
+				MARKETING_VERSION = 0.2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vision.lab;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B00000000000000000000010 /* Build configuration list for PBXProject "VisionLab" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00000000000000000000030 /* Debug */,
+				B00000000000000000000031 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B00000000000000000000011 /* Build configuration list for PBXNativeTarget "VisionLab" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00000000000000000000032 /* Debug */,
+				B00000000000000000000033 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B00000000000000000000001 /* Project object */;
+}
