@@ -53,6 +53,39 @@ uncertainty. Calls can happen more frequently when the scene changes, subject
 to the global call cap, stage cooldowns, and one in-flight call per stage.
 Reaching the call cap can leave an unresolved scene; the report marks that
 limitation. Failed calls are not automatically retried by the HTTP client.
+HTTP 400/401/403/404 stops the run after the first observed failure. A new camera
+frame cannot repair a model name, request schema, account permission, key or
+endpoint problem. Already submitted calls can still finish during shutdown.
+
+### If Qwen returns HTTP 404
+
+The error log now includes the model, HTTP status, and a recognized provider code
+when present. Arbitrary provider messages are discarded so echoed credentials or
+camera details never enter the logs. A 404 alone does not establish whether the
+model is unavailable, account access is missing, or the endpoint is wrong.
+
+If your earlier uploaded-video test worked with `qwen3-vl-plus`, isolate the live
+connection with the same key and a single request using Plus:
+
+```sh
+.venv/bin/python -m vision.stream_live --host 192.168.1.50 \
+  --backend alibaba --ask-key --seconds 15 --max-calls 1 \
+  --attend-model qwen3-vl-plus --inspect-model qwen3-vl-plus
+```
+
+This deliberately changes both stages from the Flash/Plus comparison; it is a
+connection test, not a measurement of Flash performance. With one call, final
+follow-up can be denied by the cap and the run may be marked degraded even when
+that one inference succeeds. Look for a `result` with actual usage.
+
+Use `--endpoint` to supply a full HTTPS `.../chat/completions` URL if your key uses
+a different region or workspace. Do not change region by guessing: match the
+endpoint to the Alibaba Model Studio console or your previously working app.
+The original Singapore endpoint remains the default. Custom endpoints receive
+the API key and selected images; only use an endpoint you trust.
+
+See [Alibaba error codes](https://www.alibabacloud.com/help/en/model-studio/error-code)
+and [regional vision endpoint guidance](https://help.aliyun.com/en/model-studio/qwen-vl-compatible-with-openai).
 
 The camera capture stops at the duration limit; decoder reads can take up to
 the configured five-second timeout. Already submitted model work may finish

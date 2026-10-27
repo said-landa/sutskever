@@ -18,6 +18,7 @@ from vision.stream_models import (
     ModelPrices,
     ModelRequest,
     ModelResponseError,
+    ModelHTTPError,
     ModelTransportError,
     SceneMemory,
     TokenUsage,
@@ -336,6 +337,46 @@ class ModelAdapterTests(unittest.TestCase):
             opener.return_value.open.return_value = response
             with self.assertRaises(ModelTransportError):
                 _post(http_request, 5, 20)
+
+    def test_http_404_exposes_only_allowlisted_code_and_configuration_hint(self) -> None:
+        from urllib.request import Request
+
+        for code, expected in (('model_not_found', 'model_not_found'),
+                               ('WorkSpaceNotFound', 'WorkSpaceNotFound'),
+                               (SECRET, None)):
+            with self.subTest(code=code):
+                body = json.dumps({'error': {'code': code, 'message': SECRET}}).encode()
+                failure = HTTPError(ModelConfig().endpoint, 404, SECRET, {}, io.BytesIO(body))
+                with patch('vision.stream_models.build_opener') as opener:
+                    opener.return_value.open.side_effect = failure
+                    with self.assertRaises(ModelHTTPError) as caught:
+                        _post(Request(ModelConfig().endpoint), 5, 8192)
+                self.assertEqual(caught.exception.status_code, 404)
+                self.assertEqual(caught.exception.provider_code, expected)
+                self.assertTrue(caught.exception.configuration_failure)
+                self.assertNotIn(SECRET, str(caught.exception))
+                self.assertEqual(opener.return_value.open.call_count, 1)
+
+    def test_error_body_is_bounded_and_flat_provider_envelope_is_supported(self) -> None:
+        from urllib.request import Request
+
+        body = io.BytesIO(b'x' * 9000)
+        failure = HTTPError(ModelConfig().endpoint, 404, SECRET, {}, body)
+        with patch('vision.stream_models.build_opener') as opener:
+            opener.return_value.open.side_effect = failure
+            with self.assertRaises(ModelHTTPError) as caught:
+                _post(Request(ModelConfig().endpoint), 5, 8192)
+        self.assertIsNone(caught.exception.provider_code)
+        body = json.dumps({'code': 'ModelNotFound', 'message': SECRET}).encode()
+        failure = HTTPError(ModelConfig().endpoint, 404, SECRET, {}, io.BytesIO(body))
+        with patch('vision.stream_models.build_opener') as opener:
+            opener.return_value.open.side_effect = failure
+            with self.assertRaises(ModelHTTPError) as caught:
+                _post(Request(ModelConfig().endpoint), 5, 8192)
+        self.assertEqual(caught.exception.provider_code, 'ModelNotFound')
+        self.assertNotIn(SECRET, str(caught.exception))
+        self.assertFalse(ModelHTTPError('Rate limited', status_code=429).configuration_failure)
+        self.assertFalse(ModelHTTPError('Server error', status_code=503).configuration_failure)
 
 
 if __name__ == "__main__":

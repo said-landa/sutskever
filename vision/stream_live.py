@@ -214,6 +214,10 @@ def main(argv=None):
     parser.add_argument('--seconds', type=float, default=60)
     parser.add_argument('--backend', choices=('watch', 'alibaba'), default='watch')
     parser.add_argument('--ask-key', action='store_true')
+    parser.add_argument('--endpoint', default=ModelConfig().endpoint,
+                        help='Full HTTPS chat/completions URL matching your API-key region')
+    parser.add_argument('--attend-model', default=ModelConfig().attend_model)
+    parser.add_argument('--inspect-model', default=ModelConfig().inspect_model)
     parser.add_argument('--sample-fps', type=float, default=2)
     parser.add_argument('--encoder', choices=('mobilenet', 'appearance'), default='mobilenet')
     parser.add_argument('--detector', choices=('ssdlite', 'none'), default='ssdlite')
@@ -240,7 +244,8 @@ def main(argv=None):
             if (incoming is None) != (outgoing is None):
                 raise ValueError(f'Provide both input and output prices for {stage}')
             prices[f'{stage}_prices'] = None if incoming is None else ModelPrices(incoming, outgoing)
-        model_config = ModelConfig(**prices)
+        model_config = ModelConfig(endpoint=args.endpoint, attend_model=args.attend_model,
+                                   inspect_model=args.inspect_model, **prices)
         output = args.output or Path('local/camera') / time.strftime('%Y%m%d-%H%M%S')
         if output.exists():
             raise ValueError('Choose a new output directory; existing runs are never overwritten')
@@ -257,10 +262,12 @@ def main(argv=None):
         parser.error(str(error))
     key = None
     if args.backend == 'alibaba':
-        print('Alibaba mode sends selected camera images to the Singapore Qwen endpoint; max calls:', args.max_calls)
+        print('Alibaba mode sends selected camera images to the configured Qwen endpoint; max calls:', args.max_calls)
         key = getpass.getpass('Alibaba API key (not saved): ') if args.ask_key else os.environ.get('ALIBABA_API_KEY', '')
         if not key.strip():
             parser.error('Use --ask-key or ALIBABA_API_KEY; never paste keys into chat')
+        if any(character.isspace() for character in key.strip()):
+            parser.error('The API key contains internal whitespace; copy the Model Studio key again locally')
     previous_key = os.environ.get('ALIBABA_API_KEY')
     if key:
         os.environ['ALIBABA_API_KEY'] = key

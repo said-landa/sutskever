@@ -149,6 +149,25 @@ class LiveIntegrationTests(unittest.TestCase):
                                    '--output', str(Path(folder) / 'run')]), 1)
             self.assertNotIn('ALIBABA_API_KEY', os.environ)
 
+    def test_cli_honors_explicit_models_and_endpoint(self):
+        with tempfile.TemporaryDirectory() as folder, \
+                patch.dict(os.environ, {'TAPO_CAMERA_USERNAME': 'fixture-user',
+                                        'TAPO_CAMERA_PASSWORD': 'fixture-password'}, clear=True), \
+                patch('getpass.getpass', return_value='fixture-key'), \
+                patch('vision.stream_live.AlibabaVisionClient') as client, \
+                patch('vision.stream_live.LiveVideoSource.open', side_effect=RuntimeError('Fixture unavailable')), \
+                redirect_stdout(io.StringIO()):
+            status = main(['--host', '192.168.1.50', '--backend', 'alibaba', '--ask-key',
+                           '--attend-model', 'qwen3-vl-plus', '--inspect-model', 'qwen3-vl-plus',
+                           '--endpoint', 'https://example.com/compatible-mode/v1/chat/completions',
+                           '--output', str(Path(folder) / 'run')])
+            self.assertEqual(status, 1)
+            config = client.call_args.args[0]
+            self.assertEqual(config.attend_model, 'qwen3-vl-plus')
+            self.assertEqual(config.inspect_model, 'qwen3-vl-plus')
+            self.assertEqual(config.endpoint, 'https://example.com/compatible-mode/v1/chat/completions')
+            self.assertNotIn('ALIBABA_API_KEY', os.environ)
+
 
 if __name__ == '__main__':
     unittest.main()

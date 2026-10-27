@@ -23,7 +23,7 @@ import time
 
 from vision.stream_attention import AttentionConfig, AttentionController, InspectionPlan
 from vision.stream_models import (AlibabaVisionClient, FrameSample, ModelConfig,
-                                  ModelError, ModelRequest, ModelPrices, SceneMemory)
+                                  ModelError, ModelHTTPError, ModelRequest, ModelPrices, SceneMemory)
 from vision.stream_video import FrameRingBuffer, VideoSource
 
 
@@ -131,7 +131,18 @@ class ReplayExperiment:
                       'message': 'Replay stopped; inspect the terminal error. No safety assessment is available.'})
             raise
         finally:
+            if status in ('cancelled', 'failed') and callable(getattr(source, 'close', None)):
+                source.close()
+            if not self.watch_wall_seconds:
+                self.watch_wall_seconds = self.clock() - self.start_wall
             self.executor.shutdown(wait=not self.cancelled, cancel_futures=True)
+            # A second stage may already have been sent before the fatal reply.
+            # Account for its completed usage without scheduling any more work.
+            while status == 'failed' and self.jobs:
+                try:
+                    self.poll()
+                except ModelHTTPError:
+                    pass
             summary = self.report(status, metadata)
             self._event_stream.close()
             self._event_stream = None
@@ -220,7 +231,14 @@ class ReplayExperiment:
                 if self.controller.pending.get(plan.stage) == plan:
                     self.controller.fail(plan, message, arrival)
                 self.log({'type': 'model_error', 'id': plan.id, 'stage': plan.stage,
-                          'available_at': arrival, 'message': message})
+                          'available_at': arrival, 'message': message,
+                          'model': error.model if isinstance(error, ModelError) else None,
+                          'http_status': error.status_code if isinstance(error, ModelHTTPError) else None,
+                          'provider_code': error.provider_code if isinstance(error, ModelHTTPError) else None})
+                if isinstance(error, ModelHTTPError) and error.configuration_failure:
+                    # A new observation cannot repair credentials, permissions,
+                    # a missing model or an invalid route. Stop without retries.
+                    raise
 
     def add_usage(self, usage):
         if usage is None:

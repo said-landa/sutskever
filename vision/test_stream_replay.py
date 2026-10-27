@@ -15,7 +15,7 @@ import time
 import unittest
 
 from vision.stream_attention import AttentionConfig
-from vision.stream_models import AnalysisResult, ModelResponseError, TokenUsage
+from vision.stream_models import AnalysisResult, ModelHTTPError, ModelResponseError, TokenUsage
 from vision.stream_replay import ReplayExperiment
 from vision.stream_video import FrameObservation
 
@@ -296,6 +296,80 @@ class ReplayAcceptanceTests(unittest.TestCase):
                 self.assertEqual((output / "summary.json").read_text(), "prior-result")
             finally:
                 experiment.executor.shutdown(wait=True, cancel_futures=True)
+
+    def test_configuration_failure_stops_before_another_request_and_saves_failed_report(self):
+        from concurrent.futures import wait
+
+        class Client:
+            calls = 0
+
+            def analyze(self, request):
+                self.calls += 1
+                error = ModelHTTPError('Model unavailable; check model access and region.',
+                                       status_code=404, provider_code='model_not_found')
+                error.model, error.stage = 'fixture-model', request.stage
+                raise error
+
+        class Source:
+            closed = False
+
+            def __iter__(self):
+                yield frame(0.0)
+                yield frame(1.0)
+                wait([job[1] for job in experiment.jobs.values()], timeout=2)
+                yield frame(2.0)
+                raise AssertionError('A permanent HTTP error must stop observation')
+
+            def close(self):
+                self.closed = True
+
+        with tempfile.TemporaryDirectory() as directory:
+            client, source = Client(), Source()
+            experiment = ReplayExperiment('Inspect visible changes.', Path(directory) / 'error', client=client)
+            with self.assertRaises(ModelHTTPError):
+                experiment.run(source)
+            self.assertTrue(source.closed)
+            self.assertEqual(client.calls, 1)
+            summary = json.loads((experiment.output / 'summary.json').read_text())
+            self.assertEqual(summary['status'], 'failed')
+            self.assertEqual(summary['usage']['input_tokens'], 0)
+            self.assertIsNone(summary['estimated_cost_usd'])
+            event = next(e for e in experiment.events if e['type'] == 'model_error')
+            self.assertEqual(event['http_status'], 404)
+            self.assertEqual(event['provider_code'], 'model_not_found')
+            self.assertEqual(event['model'], 'fixture-model')
+
+    def test_fatal_reply_still_accounts_for_other_already_submitted_stage(self):
+        from concurrent.futures import wait
+
+        class Client:
+            calls = 0
+
+            def analyze(self, request):
+                self.calls += 1
+                if request.stage == 'inspect':
+                    raise ModelHTTPError('Fixture model unavailable.', status_code=404)
+                return response(request, usage=TokenUsage(123, 45))
+
+        with tempfile.TemporaryDirectory() as directory:
+            client = Client()
+            experiment = ReplayExperiment('Inspect visible changes.', Path(directory) / 'parallel-error',
+                client=client, config=AttentionConfig(inspect_interval=1))
+
+            def source():
+                yield frame(0)
+                yield frame(1)
+                wait([job[1] for job in experiment.jobs.values()], timeout=2)
+                yield frame(2)
+
+            with self.assertRaises(ModelHTTPError):
+                experiment.run(source())
+            self.assertEqual(client.calls, 2)
+            summary = json.loads((experiment.output / 'summary.json').read_text())
+            self.assertEqual(summary['usage']['input_tokens'], 123)
+            self.assertEqual(summary['usage']['output_tokens'], 45)
+            self.assertIsNone(summary['estimated_cost_usd'])
+            self.assertEqual(experiment.jobs, {})
 
 
 if __name__ == "__main__":

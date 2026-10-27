@@ -150,6 +150,19 @@ class ModelTransportError(ModelError):
     pass
 
 
+class ModelHTTPError(ModelTransportError):
+    """HTTP metadata with an allowlisted code; provider text is never exposed."""
+
+    def __init__(self, message: str, *, status_code: int, provider_code: str | None = None):
+        super().__init__(message)
+        self.status_code = status_code
+        self.provider_code = provider_code
+
+    @property
+    def configuration_failure(self) -> bool:
+        return self.status_code in (400, 401, 403, 404)
+
+
 class ModelResponseError(ModelError):
     pass
 
@@ -172,13 +185,42 @@ def _post(request: Request, timeout: float, limit: int) -> bytes:
             return body
     except HTTPError as error:
         status = error.code
-        error.close()
+        provider_code = None
+        # Read only a bounded error envelope. Never retain arbitrary provider
+        # messages, which may echo keys, URLs, prompts or personal image details.
+        allowed_codes = {
+            'ModelNotFound', 'model_not_found', 'model_not_supported',
+            'WorkSpaceNotFound', 'NotFound', 'InvalidApiKey', 'invalid_api_key',
+            'AccessDenied', 'access_denied', 'AccessDenied.Unpurchased',
+            'InvalidParameter', 'invalid_parameter_error',
+        }
+        try:
+            body = error.read(min(limit, 8192) + 1)
+            if len(body) <= min(limit, 8192):
+                envelope = _load_json(body)
+                detail = envelope.get('error', envelope) if isinstance(envelope, dict) else None
+                code = detail.get('code') if isinstance(detail, dict) else None
+                if isinstance(code, str) and code in allowed_codes:
+                    provider_code = code
+        except (OSError, ValueError, TypeError, AttributeError, RecursionError):
+            pass
+        finally:
+            error.close()
         category = {
+            400: "invalid request; check the selected model and supported parameters",
             401: "authentication failed",
             403: "access denied or quota unavailable",
+            404: "model or endpoint unavailable; check model access, endpoint path and API-key region",
             429: "rate or quota limit reached",
         }.get(status, "request failed")
-        raise ModelTransportError(f"Model HTTP {status}: {category}.") from None
+        if provider_code in ('ModelNotFound', 'model_not_found'):
+            category = 'model not found or access unavailable; check the model ID and API-key region'
+        elif provider_code == 'model_not_supported':
+            category = 'model does not support this API interface'
+        elif provider_code == 'WorkSpaceNotFound':
+            category = 'workspace not found; check the endpoint workspace and API-key region'
+        raise ModelHTTPError(f"Model HTTP {status}: {category}.",
+                             status_code=status, provider_code=provider_code) from None
     except (URLError, TimeoutError, OSError):
         raise ModelTransportError("Model network request failed or timed out.") from None
 
