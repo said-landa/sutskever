@@ -1,5 +1,27 @@
 # Vision Lab app record
 
+## Live camera release candidate — October 28, 2026
+
+Version **0.3.0 (3)** adds a native Live tab and the paired Mac camera bridge.
+The signed archive is `local/releases/VisionLab-0.3.0-3.xcarchive`; the App Store
+distribution export is `local/releases/Live-0.3.0-3/VisionLab.ipa`. These are local
+artifacts; upload, Apple processing, tester assignment and TestFlight installation
+have not been confirmed for this candidate. See `docs/LIVE_CAMERA.md` for pairing,
+monitoring controls, notification setup and validation limits.
+
+The user reported that Vision is absent from their TestFlight list. Tester
+membership/invitation and the intended Apple account need checking in the
+user-operated App Store Connect browser. Confirm automatic distribution is off
+before upload if builds must await the user's testing decision. Do not replace
+the physical iPhone installation using Xcode as a substitute for TestFlight.
+
+The existing local APNs config points to a missing signing key. Production APNs
+delivery is implemented but is not ready until that key is restored/configured
+locally and the TestFlight app sends its notification registration. Actual
+locked-phone delivery remains unverified.
+
+## Previous release
+
 The user identified **Sutskever** as the Vision app record on October 19, 2026: Apple app ID `6824528224`. Its App Information page confirms bundle ID `com.vision.lab` and SKU `vision-lab-ios`; its TestFlight page had no builds. This is separate from the installed stable app, whose bundle ID is `com.vision.live`.
 
 | Field | Value |

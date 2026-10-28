@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B00000000000000000000048 /* LiveCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000049 /* LiveCamera.swift */; };
 		B00000000000000000000040 /* VisionLab/VisionLabApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000007 /* VisionLab/VisionLabApp.swift */; };
 		B00000000000000000000043 /* VideoAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000B /* VideoAnalysis.swift */; };
 		B00000000000000000000044 /* VideoModelClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000C /* VideoModelClient.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B00000000000000000000049 /* LiveCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionLab/LiveCamera.swift; sourceTree = "<group>"; };
 		40F65E953076A924003DBDB1 /* VisionLab.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = VisionLab.entitlements; path = VisionLab/VisionLab.entitlements; sourceTree = "<group>"; };
 		B00000000000000000000005 /* VisionLab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisionLab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B00000000000000000000007 /* VisionLab/VisionLabApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionLab/VisionLabApp.swift; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 			isa = PBXGroup;
 			children = (
 				40F65E953076A924003DBDB1 /* VisionLab.entitlements */,
+				B00000000000000000000049 /* LiveCamera.swift */,
 				B00000000000000000000007 /* VisionLab/VisionLabApp.swift */,
 				B0000000000000000000000B /* VideoAnalysis.swift */,
 				B0000000000000000000000C /* VideoModelClient.swift */,
@@ -144,6 +147,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B00000000000000000000040 /* VisionLab/VisionLabApp.swift in Sources */,
+				B00000000000000000000048 /* LiveCamera.swift in Sources */,
 				B00000000000000000000043 /* VideoAnalysis.swift in Sources */,
 				B00000000000000000000044 /* VideoModelClient.swift in Sources */,
 				B00000000000000000000045 /* BackgroundVideoTransfer.swift in Sources */,
@@ -182,15 +186,16 @@
 		B00000000000000000000032 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				APP_DISPLAY_NAME = "Vision Lab";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = VisionLab/VisionLab.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = VAJK75LR5L;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = VisionLab/Info.plist;
-				MARKETING_VERSION = 0.2.0;
+				MARKETING_VERSION = 0.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vision.lab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -206,11 +211,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = VisionLab/VisionLab.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = VAJK75LR5L;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = VisionLab/Info.plist;
-				MARKETING_VERSION = 0.2.0;
+				MARKETING_VERSION = 0.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vision.lab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

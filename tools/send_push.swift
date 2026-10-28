@@ -5,7 +5,13 @@ struct PushConfiguration: Decodable {
     let keyFile: String
     let keyID: String
     let teamID: String
-    let registrationFile: String
+    let registrationFile: String?
+}
+
+struct DetectionPush: Decodable {
+    let registration: Registration
+    let title: String
+    let body: String
 }
 
 struct Registration: Decodable {
@@ -48,7 +54,7 @@ func validated(_ registration: Registration) throws -> Registration {
         throw PushError.invalid("Invalid device token: expected hexadecimal bytes.")
     }
     guard registration.topic == "com.vision.lab" else { throw PushError.invalid("This test sender targets Vision Lab only.") }
-    guard registration.environment == "sandbox" else { throw PushError.invalid("This development sender requires a Sandbox registration.") }
+    guard ["sandbox", "production"].contains(registration.environment) else { throw PushError.invalid("Expected sandbox or production registration.") }
     return registration
 }
 
@@ -78,6 +84,7 @@ func selfTest() throws {
         _ = try validated(Registration(deviceToken: "00", topic: "com.vision.live", environment: "sandbox"))
         throw PushError.invalid("Main-app topic was accepted.")
     } catch PushError.invalid(let reason) where reason.contains("Lab only") {}
+    _ = try validated(Registration(deviceToken: "00", topic: "com.vision.lab", environment: "production"))
     print("PASS: ES256 signature, JWT claims, alert payload, size limit, and Lab isolation. No push sent.")
 }
 
@@ -85,7 +92,9 @@ func selfTest() throws {
 struct PushSender {
     static func main() async {
         do {
-            let arguments = Array(CommandLine.arguments.dropFirst())
+            var arguments = Array(CommandLine.arguments.dropFirst())
+            let detectionMode = arguments.first == "--event-stdin"
+            if detectionMode { arguments.removeFirst() }
             if arguments == ["--self-test"] { try selfTest(); return }
             guard arguments.count == 2, ["--config", "--check-config"].contains(arguments[0]) else {
                 print("Usage: send_push --config /absolute/path/push-config.json\n       send_push --check-config /absolute/path/push-config.json\n       send_push --self-test")
@@ -94,7 +103,7 @@ struct PushSender {
             let config = try JSONDecoder().decode(PushConfiguration.self,
                 from: Data(contentsOf: URL(fileURLWithPath: arguments[1])))
             guard !config.keyID.isEmpty, !config.teamID.isEmpty,
-                  config.keyFile.hasPrefix("/"), config.registrationFile.hasPrefix("/") else {
+                  config.keyFile.hasPrefix("/") else {
                 throw PushError.invalid("Provide Key ID, Team ID, and absolute local file paths.")
             }
             let key = try P256.Signing.PrivateKey(pemRepresentation: String(contentsOfFile: config.keyFile, encoding: .utf8))
@@ -104,16 +113,31 @@ struct PushSender {
                 print("Configuration and P-256 signing key validated locally. No push sent; Apple key scope is not verified yet.")
                 return
             }
-            let registration = try validated(JSONDecoder().decode(Registration.self,
-                from: Data(contentsOf: URL(fileURLWithPath: config.registrationFile))))
+            let detection: DetectionPush?
+            let registration: Registration
+            if detectionMode {
+                var input = Data()
+                while let chunk = try FileHandle.standardInput.read(upToCount: min(1024, 8193 - input.count)), !chunk.isEmpty {
+                    input.append(chunk)
+                    guard input.count <= 8192 else { throw PushError.invalid("Detection input exceeds size limit.") }
+                }
+                let event = try JSONDecoder().decode(DetectionPush.self, from: input)
+                detection = event
+                registration = try validated(event.registration)
+            } else {
+                detection = nil
+                guard let file = config.registrationFile, file.hasPrefix("/") else { throw PushError.invalid("Provide an absolute registrationFile for a test push.") }
+                registration = try validated(JSONDecoder().decode(Registration.self,
+                    from: Data(contentsOf: URL(fileURLWithPath: file))))
+            }
             let jwt = try providerToken(key: key, keyID: config.keyID, teamID: config.teamID,
                 issuedAt: Int(Date().timeIntervalSince1970))
-            let data = try payload(title: "Vision Lab · remote push test",
-                body: "Sent by your Mac through Apple. This is a delivery test, not a model detection.")
+            let data = try payload(title: detection?.title ?? "Vision Lab · remote push test",
+                body: detection?.body ?? "Sent by your Mac through Apple. This is a delivery test, not a model detection.")
             let requestID = UUID().uuidString.lowercased()
             // Pass authentication through stdin, not process arguments or logs.
             let curlConfig = """
-            url = "https://api.sandbox.push.apple.com/3/device/\(registration.deviceToken)"
+            url = "https://\(registration.environment == "production" ? "api.push.apple.com" : "api.sandbox.push.apple.com")/3/device/\(registration.deviceToken)"
             header = "authorization: bearer \(jwt)"
             header = "apns-topic: \(registration.topic)"
             header = "apns-push-type: alert"
@@ -155,7 +179,7 @@ struct PushSender {
                 let reason = object?["reason"] as? String ?? "Unknown"
                 throw PushError.invalid("APNs rejected the push: HTTP \(status[0]), \(reason).")
             }
-            print("APNs accepted the remote test push (HTTP 200 / HTTP 2). Request: \(requestID)")
+            print("APNs accepted the push (HTTP 200 / HTTP 2). Request: \(requestID)")
             print("Check the locked iPhone. Acceptance is not proof that the banner appeared.")
         } catch {
             fputs("Push failed: \(error.localizedDescription)\n", stderr)

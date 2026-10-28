@@ -10,6 +10,8 @@ struct VisionLabApp: App {
     var body: some Scene {
         WindowGroup {
             TabView {
+                LiveCameraView()
+                    .tabItem { Label("Live", systemImage: "video") }
                 MonitorView(analysis: analysis, settings: settings)
                     .tabItem { Label("Monitor", systemImage: "eye") }
             }
@@ -22,6 +24,13 @@ final class PushRegistration: ObservableObject {
     static let shared = PushRegistration()
     @Published var token = ""
     @Published var status = "Register this iPhone for remote notifications."
+    static var environment: String {
+        #if DEBUG
+        return "sandbox"
+        #else
+        return "production"
+        #endif
+    }
     func register() async {
         do {
             let allowed = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge])
@@ -36,23 +45,28 @@ final class PushRegistration: ObservableObject {
             let folder = try FileManager.default.url(for: .applicationSupportDirectory,
                 in: .userDomainMask, appropriateFor: nil, create: true)
             let payload: [String: String] = ["deviceToken": token, "topic": "com.vision.lab",
-                "environment": "sandbox", "registeredAt": ISO8601DateFormatter().string(from: Date())]
+                "environment": Self.environment, "registeredAt": ISO8601DateFormatter().string(from: Date())]
             let json = try JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted, .sortedKeys])
             try json.write(to: folder.appendingPathComponent("apns-registration.json"), options: [.atomic, .completeFileProtection])
-            status = "Registered with Apple · Sandbox. Ready for a remote test."
+            status = "Registered with Apple · \(Self.environment)."
         } catch { status = "Registered, but token export failed: " + error.localizedDescription }
     }
 }
 
 @MainActor
-final class PushAppDelegate: NSObject, UIApplicationDelegate {
+final class PushAppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         // Refresh the token on every launch after the user has enabled remote registration.
         if UserDefaults.standard.bool(forKey: "pushRegistrationEnabled") {
             application.registerForRemoteNotifications()
         }
         BackgroundVideoTransfer.shared.reconnect()
+        UNUserNotificationCenter.current().delegate = self
         return true
+    }
+    nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.banner, .sound, .list])
     }
     func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String,
                      completionHandler: @escaping () -> Void) {

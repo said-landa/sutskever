@@ -13,6 +13,7 @@ stream = ["numpy>=2.0,<3", "opencv-python-headless>=4.10,<5", "torch>=2.5,<3", "
 [project.scripts]
 vision-stream = "vision.stream_replay:main"
 vision-live = "vision.stream_live:main"
+vision-camera-bridge = "vision.camera_gateway:main"
 
 [tool.setuptools.packages.find]
 include = ["vision*"]
