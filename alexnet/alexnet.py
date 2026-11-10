@@ -1,5 +1,4 @@
-import random #Prepare to give the filters different initial weights
-#Different starting weights let the 96 filters develop different responses during training.
+import random #Different starting weights let the 96 filters develop different responses during training.
 
 red = 128.0
 green = 64.0
@@ -17,9 +16,7 @@ width = len(image[0])
 channels = len(image[0][0])
 
 kernel_size = 11 #names the height and width of a square filter. 11 means the filter covers 11 rows × 11 columns of pixels at each position.
-#With our 3 color channels, each filter will contain 11 × 11 × 3 = 363 weights. Training will adjust those weights.
 
-#Set how far the filter moves between positions, measured in pixels
 stride = 4 #4 means moving four pixels horizontally between positions, and four pixels vertically between rows of positions.
 #The filter still covers 11 × 11 pixels, so neighboring windows overlap. A larger stride evaluates fewer positions, reducing computation and output size.
 
@@ -42,9 +39,17 @@ for _ in range(weights_per_filter - 1): #We use '_' because we need the repetiti
     filter_weights.append(random.gauss(0.0, 0.01)) #random.gauss(0.0, 0.01) supplies a fresh weight on each iteration, using the same mean (0.0) and standard deviation (0.01) as the first weight.
 
 filter_bias = 0.0 #names the trainable value this filter adds to its weighted sum at every image position. 0.0 matches AlexNet’s initialization for the first convolutional layer.
-response = filter_bias
-for channel in range(channels): 
-    response += image[0][0][channel] * filter_weights[channel] #image[0][0][channel] selects the current color value from the top-left pixel. filter_weights[channel] uses the same index to select its matching weight.
-
+feature_map = [[0.0] * output_width for _ in range(output_height)]
+for output_row in range(output_height):  #The output row index tells us where to store the result.
+    start_row = output_row * stride
+    for output_col in range(output_width):
+        start_col = output_col * stride
+        response = filter_bias
+        weight_index = 0 #weight_index tracks the next entry in the filter’s flat list of weights. = 0 starts at the first weight every time we begin a new output cell.
+        
+        for input_col in range(start_col, start_col + kernel_size):
+            for channel in range(channels): 
+                response += image[start_row][input_col][channel] * filter_weights[weight_index] #image[start_row][start_col][channel] reads one color value from the current patch’s top-left pixel.
+                weight_index += 1 #weight_index tracks the next weight.
 
 print(response)
