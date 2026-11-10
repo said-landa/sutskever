@@ -40,4 +40,8 @@ for _ in range(weights_per_filter - 1): #We use '_' because we need the repetiti
 
 filter_bias = 0.0 #names the trainable value this filter adds to its weighted sum at every image position. 0.0 matches AlexNet’s initialization for the first convolutional layer.
 response = filter_bias
-print(len(filter_weights))
+response += image[0][0][0] * filter_weights[0]
+response += image[0][0][1] * filter_weights[1]
+response += image[0][0][2] * filter_weights[2]
+
+print(response)
