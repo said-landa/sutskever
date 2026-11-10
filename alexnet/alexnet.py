@@ -11,6 +11,8 @@ image = [
     for _ in range(15) #The outer loop repeats that whole row-building operation 15 times to make 15 rows.
 ]
 
+image[0][0][0] = 255.0
+
 height = len(image)
 width = len(image[0])
 channels = len(image[0][0])
@@ -30,26 +32,32 @@ numFilters = 96 #96 is AlexNet’s chosen count for this layer.
 #96 filters produce 96 output channels, allowing the layer to learn different patterns. An output channel is one feature map produced by a convolutional layer.
 #A convolution extracts features from small neighborhoods of pixels.
 
+feature_maps = []
 random.seed(0) #Make our random starting weights repeatable
-weight = random.gauss(0.0, 0.01)
-filter_weights = [weight] #[weight] creates a list whose first entry is the random weight already generated.
-weights_per_filter = kernel_size * kernel_size * channels
+for filter_index in range(numFilters):
+    weight = random.gauss(0.0, 0.01)
+    filter_weights = [weight] #[weight] creates a list whose first entry is the random weight already generated.
+    weights_per_filter = kernel_size * kernel_size * channels
 
-for _ in range(weights_per_filter - 1): #We use '_' because we need the repetitions but won’t use the individual numbers. weights_per_filter - 1 gives 362 repetitions because the list already holds one weight.
-    filter_weights.append(random.gauss(0.0, 0.01)) #random.gauss(0.0, 0.01) supplies a fresh weight on each iteration, using the same mean (0.0) and standard deviation (0.01) as the first weight.
+    for _ in range(weights_per_filter - 1): #We use '_' because we need the repetitions but won’t use the individual numbers. weights_per_filter - 1 gives 362 repetitions because the list already holds one weight.
+        filter_weights.append(random.gauss(0.0, 0.01)) #random.gauss(0.0, 0.01) supplies a fresh weight on each iteration, using the same mean (0.0) and standard deviation (0.01) as the first weight.
 
-filter_bias = 0.0 #names the trainable value this filter adds to its weighted sum at every image position. 0.0 matches AlexNet’s initialization for the first convolutional layer.
-feature_map = [[0.0] * output_width for _ in range(output_height)]
-for output_row in range(output_height):  #The output row index tells us where to store the result.
-    start_row = output_row * stride
-    for output_col in range(output_width):
-        start_col = output_col * stride
-        response = filter_bias
-        weight_index = 0 #weight_index tracks the next entry in the filter’s flat list of weights. = 0 starts at the first weight every time we begin a new output cell.
-        
-        for input_col in range(start_col, start_col + kernel_size):
-            for channel in range(channels): 
-                response += image[start_row][input_col][channel] * filter_weights[weight_index] #image[start_row][start_col][channel] reads one color value from the current patch’s top-left pixel.
-                weight_index += 1 #weight_index tracks the next weight.
+    filter_bias = 0.0 #names the trainable value this filter adds to its weighted sum at every image position. 0.0 matches AlexNet’s initialization for the first convolutional layer.
+    feature_map = [[0.0] * output_width for _ in range(output_height)]
+    for output_row in range(output_height):  #The output row index tells us where to store the result.
+        start_row = output_row * stride
+        for output_col in range(output_width):
+            start_col = output_col * stride
+            response = filter_bias
+            weight_index = 0 #weight_index tracks the next entry in the filter’s flat list of weights. = 0 starts at the first weight every time we begin a new output cell.
+            for input_row in range(start_row, start_row + kernel_size):
+                for input_col in range(start_col, start_col + kernel_size):
+                    for channel in range(channels): 
+                        response += image[input_row][input_col][channel] * filter_weights[weight_index] #image[start_row][start_col][channel] reads one color value from the current patch’s top-left pixel.
+                        weight_index += 1 #weight_index tracks the next weight.
+            feature_map[output_row][output_col] = max(0.0, response) #this is ReLU
 
-print(response)
+    feature_maps.append(feature_map)
+
+
+print(len(feature_maps), len(feature_maps[0]), len(feature_maps[0][0])) #len(feature_maps) counts the filters’ grids. len(feature_maps[0]) counts rows in the first grid. len(feature_maps[0][0]) counts columns in its first row.
