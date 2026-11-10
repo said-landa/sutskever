@@ -12,10 +12,10 @@ image = [
 ]
 
 height = len(image)
-widht = len(image[0])
+width = len(image[0])
 channels = len(image[0][0])
 
-filterSize = 11 #names the height and width of a square filter. 11 means the filter covers 11 rows × 11 columns of pixels at each position.
+kernel_size = 11 #names the height and width of a square filter. 11 means the filter covers 11 rows × 11 columns of pixels at each position.
 #With our 3 color channels, each filter will contain 11 × 11 × 3 = 363 weights. Training will adjust those weights.
 
 #Set how far the filter moves between positions, measured in pixels
@@ -31,5 +31,13 @@ numFilters = 96 #96 is AlexNet’s chosen count for this layer.
 #A convolution extracts features from small neighborhoods of pixels.
 
 random.seed(0) #Make our random starting weights repeatable
+weight = random.gauss(0.0, 0.01)
+filter_weights = [weight] #[weight] creates a list whose first entry is the random weight already generated.
+weights_per_filter = kernel_size * kernel_size * channels
 
-print(image)
+for _ in range(weights_per_filter - 1): #We use '_' because we need the repetitions but won’t use the individual numbers. weights_per_filter - 1 gives 362 repetitions because the list already holds one weight.
+    filter_weights.append(random.gauss(0.0, 0.01)) #random.gauss(0.0, 0.01) supplies a fresh weight on each iteration, using the same mean (0.0) and standard deviation (0.01) as the first weight.
+
+filter_bias = 0.0 #names the trainable value this filter adds to its weighted sum at every image position. 0.0 matches AlexNet’s initialization for the first convolutional layer.
+response = filter_bias
+print(len(filter_weights))
