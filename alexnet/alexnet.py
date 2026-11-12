@@ -59,5 +59,15 @@ for filter_index in range(numFilters):
 
     feature_maps.append(feature_map)
 
+normalization_radius = 2
+normalization_k = 2.0
+normalization_alpha = 0.0001
+normalization_beta = 0.75
+normalized_maps = []
+
+for channel_index in range(len(feature_maps)):
+    neighbor_start = max(0, channel_index - normalization_radius)
+    neighbor_stop = min(len(feature_maps), channel_index + normalization_radius + 1)
+    normalized_map = [[0.0] * output_width for _ in range(output_height)]
 
 print(len(feature_maps), len(feature_maps[0]), len(feature_maps[0][0])) #len(feature_maps) counts the filters’ grids. len(feature_maps[0]) counts rows in the first grid. len(feature_maps[0][0]) counts columns in its first row.
