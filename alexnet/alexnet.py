@@ -69,5 +69,13 @@ for channel_index in range(len(feature_maps)):
     neighbor_start = max(0, channel_index - normalization_radius)
     neighbor_stop = min(len(feature_maps), channel_index + normalization_radius + 1)
     normalized_map = [[0.0] * output_width for _ in range(output_height)]
+    for output_row in range(output_height): 
+        for output_col in range (output_width):
+            sum_of_squares = 0.0
+            for neighbor_index in range(neighbor_start, neighbor_stop):
+                neighbor_response = feature_maps[neighbor_index][output_row][output_col]
+                sum_of_squares += neighbor_response ** 2
+            normalization_base = normalization_k + normalization_alpha * sum_of_squares
+            normalization_divisor = normalization_base ** normalization_beta
 
 print(len(feature_maps), len(feature_maps[0]), len(feature_maps[0][0])) #len(feature_maps) counts the filters’ grids. len(feature_maps[0]) counts rows in the first grid. len(feature_maps[0][0]) counts columns in its first row.
