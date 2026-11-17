@@ -77,5 +77,10 @@ for channel_index in range(len(feature_maps)):
                 sum_of_squares += neighbor_response ** 2
             normalization_base = normalization_k + normalization_alpha * sum_of_squares
             normalization_divisor = normalization_base ** normalization_beta
+            normalized_map[output_row][output_col] = feature_maps[channel_index][output_row][output_col] / normalization_divisor
+    normalized_maps.append(normalized_map)
 
-print(len(feature_maps), len(feature_maps[0]), len(feature_maps[0][0])) #len(feature_maps) counts the filters’ grids. len(feature_maps[0]) counts rows in the first grid. len(feature_maps[0][0]) counts columns in its first row.
+print(feature_maps[0][0][0], normalized_maps[0][0][0]) #len(feature_maps) counts the filters’ grids. len(feature_maps[0]) counts rows in the first grid. len(feature_maps[0][0]) counts columns in its first row.
+
+
+#Reproducing the architecture is one milestone. Reproducing the paper’s accuracy will also take ImageNet preprocessing, training, and evaluation--and we will go there, one little step at a time.
