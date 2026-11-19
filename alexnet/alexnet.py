@@ -85,5 +85,7 @@ print(feature_maps[0][0][0], normalized_maps[0][0][0]) #len(feature_maps) counts
 pool_size = 3
 pool_stride = 2
 pooled_height = (output_height - pool_size) // pool_stride + 1
+pooled_width = (output_width - pool_size) // pool_stride + 1
+pooled_maps = []
 
 #Reproducing the architecture is one milestone. Reproducing the paper’s accuracy will also take ImageNet preprocessing, training, and evaluation--and we will go there, one little step at a time.
