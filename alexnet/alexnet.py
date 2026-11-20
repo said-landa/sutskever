@@ -88,4 +88,9 @@ pooled_height = (output_height - pool_size) // pool_stride + 1
 pooled_width = (output_width - pool_size) // pool_stride + 1
 pooled_maps = []
 
+for normalized_map in normalized_maps:
+    pooled_map = [[0.0] * pooled_width for _ in range(pooled_height)]
+    for pooled_row in range(pooled_height):
+        pool_start_row = pooled_row * pool_stride
+
 #Reproducing the architecture is one milestone. Reproducing the paper’s accuracy will also take ImageNet preprocessing, training, and evaluation--and we will go there, one little step at a time.
