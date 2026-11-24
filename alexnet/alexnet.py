@@ -93,5 +93,19 @@ for normalized_map in normalized_maps:
     for pooled_row in range(pooled_height):
         pool_start_row = pooled_row * pool_stride
         for pooled_col in range(pooled_width):
+            pool_start_col = pooled_col * pool_stride
+            max_value = normalized_map[pool_start_row][pool_start_col]
+            for window_row in range(pool_start_row, pool_start_row + pool_size):
+                for window_col in range(pool_start_col, pool_start_col + pool_size):
+                    max_value = max(max_value, normalized_map[window_row][window_col])
+            pooled_map[pooled_row][pooled_col] = max_value
+    pooled_maps.append(pooled_map)
 
+print(len(pooled_maps), len(pooled_maps[0]), len(pooled_maps[0][0]))
+
+conv2_kernel_size = 5
+conv2_padding = 2
+conv2_stride = 1
+conv2_num_filters = 256
+conv2_groups = 2
 #Reproducing the architecture is one milestone. Reproducing the paper’s accuracy will also take ImageNet preprocessing, training, and evaluation--and we will go there, one little step at a time.
