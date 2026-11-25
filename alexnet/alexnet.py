@@ -108,4 +108,5 @@ conv2_padding = 2
 conv2_stride = 1
 conv2_num_filters = 256
 conv2_groups = 2
+conv2_channels_per_group = len(pooled_maps) // conv2_groups
 #Reproducing the architecture is one milestone. Reproducing the paper’s accuracy will also take ImageNet preprocessing, training, and evaluation--and we will go there, one little step at a time.
