@@ -109,4 +109,27 @@ conv2_stride = 1
 conv2_num_filters = 256
 conv2_groups = 2
 conv2_channels_per_group = len(pooled_maps) // conv2_groups
+conv2_filters_per_group = conv2_num_filters // conv2_groups
+conv2_output_height = (pooled_height + 2 * conv2_padding - conv2_kernel_size) // conv2_stride + 1
+conv2_output_width = (pooled_width + 2 * conv2_padding - conv2_kernel_size) // conv2_stride + 1
+conv2_weights_per_filter = conv2_kernel_size ** 2 * conv2_channels_per_group
+conv2_feature_maps = []
+
+for conv2_filter_index in range(conv2_num_filters):
+    conv2_group_index = conv2_filter_index // conv2_filters_per_group
+    conv2_channel_start = conv2_group_index * conv2_channels_per_group
+    conv2_channel_stop = conv2_channel_start + conv2_channels_per_group
+    conv2_filter_weights = [random.gauss(0.0, 0.01) for _ in range(conv2_weights_per_filter)]
+    conv2_filter_bias = 1.0
+    conv2_feature_map = [[0.0] * conv2_output_width for _ in range(conv2_output_height)]
+    for conv2_output_row in range(conv2_output_height):
+        conv2_start_row = conv2_output_row * conv2_stride - conv2_padding
+        for conv2_output_col in range(conv2_output_width):
+            conv2_start_col = conv2_output_col * conv2_stride - conv2_padding
+            conv2_response = conv2_filter_bias
+            conv2_weight_index = 0
+            for conv2_input_row in range(conv2_start_row, conv2_start_row + conv2_kernel_size):
+                for conv2_input_col in range(conv2_start_col, conv2_start_col + conv2_kernel_size):
+                    for conv2_input_channel in range(conv2_channel_start, conv2_channel_stop):
+
 #Reproducing the architecture is one milestone. Reproducing the paper’s accuracy will also take ImageNet preprocessing, training, and evaluation--and we will go there, one little step at a time.
