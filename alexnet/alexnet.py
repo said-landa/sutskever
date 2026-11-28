@@ -131,5 +131,8 @@ for conv2_filter_index in range(conv2_num_filters):
             for conv2_input_row in range(conv2_start_row, conv2_start_row + conv2_kernel_size):
                 for conv2_input_col in range(conv2_start_col, conv2_start_col + conv2_kernel_size):
                     for conv2_input_channel in range(conv2_channel_start, conv2_channel_stop):
+                        if 0 <= conv2_input_row < pooled_height and 0 <= conv2_input_col < pooled_width:
+                            conv2_input_value = pooled_maps[conv2_input_channel][conv2_input_row][conv2_input_col]
+                            conv2_response += conv2_input_value * conv2_filter_weights[conv2_weight_index]
 
 #Reproducing the architecture is one milestone. Reproducing the paper’s accuracy will also take ImageNet preprocessing, training, and evaluation--and we will go there, one little step at a time.
